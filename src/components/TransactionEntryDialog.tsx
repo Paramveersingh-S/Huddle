@@ -1,7 +1,8 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import React, { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
+import { Camera, PenTool } from 'lucide-react'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
@@ -91,9 +92,15 @@ export function TransactionEntryDialog({ children }: { children?: React.ReactNod
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        {children || <Button className="font-semibold shadow-lg shadow-primary/20">Add Expense</Button>}
-      </DialogTrigger>
+      {children && React.isValidElement(children) ? (
+        <DialogTrigger render={children} />
+      ) : children ? (
+        <DialogTrigger>{children}</DialogTrigger>
+      ) : (
+        <DialogTrigger render={<Button className="font-semibold shadow-lg shadow-primary/20" />}>
+          Add Expense
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px] bg-background border-border">
         <DialogHeader>
           <DialogTitle className="font-heading text-2xl tracking-tight">Add Expense</DialogTitle>
@@ -104,13 +111,13 @@ export function TransactionEntryDialog({ children }: { children?: React.ReactNod
         
         <Tabs defaultValue="scan" className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-4">
-            <TabsTrigger value="scan">📸 AI Scan</TabsTrigger>
-            <TabsTrigger value="manual">✍️ Manual</TabsTrigger>
+            <TabsTrigger value="scan" className="flex items-center gap-2"><Camera className="w-4 h-4" /> AI Scan</TabsTrigger>
+            <TabsTrigger value="manual" className="flex items-center gap-2"><PenTool className="w-4 h-4" /> Manual</TabsTrigger>
           </TabsList>
           
           <TabsContent value="scan" className="space-y-4">
             <div 
-              className="border-2 border-dashed border-border rounded-lg p-8 text-center bg-surface hover:bg-surface/80 transition-colors cursor-pointer" 
+              className="group border-2 border-dashed border-border rounded-lg p-8 text-center bg-surface hover:bg-surface/80 transition-colors cursor-pointer flex flex-col items-center justify-center" 
               onClick={() => fileInputRef.current?.click()}
             >
               <input 
@@ -120,7 +127,7 @@ export function TransactionEntryDialog({ children }: { children?: React.ReactNod
                 ref={fileInputRef} 
                 onChange={handleFileChange} 
               />
-              <div className="text-4xl mb-2">📸</div>
+              <Camera className="w-12 h-12 mb-4 text-muted-foreground group-hover:text-primary transition-colors" />
               {isScanning ? (
                 <p className="text-sm font-medium animate-pulse text-primary">Scanning receipt with Gemini 1.5 Flash...</p>
               ) : (

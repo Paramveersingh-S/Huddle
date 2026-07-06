@@ -5,6 +5,7 @@ import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { Flame } from 'lucide-react'
 
 export default async function RecapPage() {
   const supabase = await createClient()
@@ -57,7 +58,7 @@ export default async function RecapPage() {
               <div className="bg-background/50 p-6 rounded-2xl border border-border/50">
                 <div className="text-xs text-muted-foreground mb-2 uppercase tracking-wider">Current Streak</div>
                 <div className="text-2xl font-bold font-heading text-warning flex items-center justify-center gap-2">
-                  <span className="text-3xl">🔥</span> {profile?.currentStreak || 0}
+                  <Flame className="w-8 h-8 fill-warning stroke-warning" /> {profile?.currentStreak || 0}
                 </div>
               </div>
             </div>

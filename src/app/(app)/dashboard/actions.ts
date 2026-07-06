@@ -20,6 +20,17 @@ export async function addTransaction(formData: FormData) {
   const occurredAt = formData.get('occurred_at') as string
   const source = (formData.get('source') as string) || 'manual'
 
+  // Ensure profile exists to prevent foreign key errors
+  let userProfile = await db.query.profiles.findFirst({ where: eq(profiles.id, user.id) })
+  if (!userProfile) {
+    await db.insert(profiles).values({
+      id: user.id,
+      email: user.email!,
+      username: user.email!.split('@')[0],
+      displayName: user.email!.split('@')[0],
+    })
+  }
+
   await db.insert(transactions).values({
     userId: user.id,
     merchant,

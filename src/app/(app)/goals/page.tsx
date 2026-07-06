@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
+import { GoalEntryDialog } from '@/components/GoalEntryDialog'
 
 export default async function GoalsPage() {
   const supabase = await createClient()
@@ -23,9 +24,11 @@ export default async function GoalsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-heading font-bold tracking-tight">Savings Goals</h1>
-        <Button className="font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
-          Create Goal
-        </Button>
+        <GoalEntryDialog>
+          <Button className="font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+            Create Goal
+          </Button>
+        </GoalEntryDialog>
       </div>
 
       {userGoals.length === 0 ? (

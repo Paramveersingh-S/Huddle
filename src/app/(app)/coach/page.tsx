@@ -1,11 +1,12 @@
 'use client'
 
-import { useChat } from 'ai/react'
+import { useChat } from '@ai-sdk/react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useEffect, useRef } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+import { Bot, Hand } from 'lucide-react'
 
 export default function CoachPage() {
   const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
@@ -29,7 +30,7 @@ export default function CoachPage() {
       <Card className="flex-1 flex flex-col bg-surface border-border overflow-hidden shadow-2xl shadow-primary/5">
         <CardHeader className="border-b border-border/50 bg-background/80 backdrop-blur">
           <CardTitle className="flex items-center gap-3">
-            <span className="text-3xl">🤖</span>
+            <Bot className="w-8 h-8 text-primary" />
             <span className="font-heading tracking-tight">Huddle Coach</span>
           </CardTitle>
         </CardHeader>
@@ -38,7 +39,7 @@ export default function CoachPage() {
           <div className="absolute inset-0 overflow-y-auto p-6 space-y-6" ref={scrollRef}>
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground opacity-80">
-                <div className="text-6xl mb-6 animate-bounce">👋</div>
+                <div className="mb-6 animate-bounce"><Hand className="w-16 h-16 text-primary/60" /></div>
                 <h2 className="text-2xl font-heading font-semibold text-foreground mb-2">Hi! I'm your AI money coach.</h2>
                 <p className="max-w-xs">Ask me about your spending, goals, or request a financial roast based on your vibe!</p>
               </div>
@@ -86,7 +87,7 @@ export default function CoachPage() {
               placeholder="Ask about your budget, or tell me what you just bought..." 
               className="flex-1 bg-surface border-border text-base h-12 rounded-xl"
             />
-            <Button type="submit" disabled={isLoading || !input.trim()} className="font-bold shadow-lg shadow-primary/20 h-12 px-6 rounded-xl active:scale-95 transition-transform">
+            <Button type="submit" disabled={isLoading || !input?.trim()} className="font-bold shadow-lg shadow-primary/20 h-12 px-6 rounded-xl active:scale-95 transition-transform">
               Send
             </Button>
           </form>

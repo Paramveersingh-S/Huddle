@@ -6,6 +6,7 @@ import { profiles, goals, transactions } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { TransactionEntryDialog } from '@/components/TransactionEntryDialog'
+import { Flame, Camera } from 'lucide-react'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -15,9 +16,20 @@ export default async function DashboardPage() {
     redirect('/sign-in')
   }
 
-  const userProfile = await db.query.profiles.findFirst({
+  let userProfile = await db.query.profiles.findFirst({
     where: eq(profiles.id, user.id)
   })
+
+  // Fallback: If user signed up before the DB trigger was added, create their profile now
+  if (!userProfile) {
+    const [newProfile] = await db.insert(profiles).values({
+      id: user.id,
+      email: user.email!,
+      username: user.email!.split('@')[0],
+      displayName: user.email!.split('@')[0],
+    }).returning()
+    userProfile = newProfile
+  }
 
   const userGoals = await db.query.goals.findMany({
     where: eq(goals.userId, user.id)
@@ -66,7 +78,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <div className="text-4xl font-bold font-heading flex items-center gap-2 mt-2">
-              <span className="text-warning text-3xl">🔥</span> {userProfile?.currentStreak || 0}
+              <span className="text-warning flex items-center"><Flame className="w-8 h-8 fill-warning stroke-warning" /></span> {userProfile?.currentStreak || 0}
             </div>
           </CardContent>
         </Card>
@@ -93,7 +105,7 @@ export default async function DashboardPage() {
       {isFirstTime && (
         <Card className="bg-surface/50 border-secondary/20 p-10 text-center flex flex-col items-center justify-center space-y-6 mt-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-tr from-secondary/5 via-transparent to-primary/5 pointer-events-none"></div>
-          <div className="text-5xl animate-bounce">📸</div>
+          <div className="animate-bounce"><Camera className="w-16 h-16 text-primary/60" /></div>
           <div className="space-y-2">
             <h2 className="text-3xl font-heading font-semibold">Ready to start Huddling?</h2>
             <p className="text-muted-foreground max-w-md mx-auto text-base">
