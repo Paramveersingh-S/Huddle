@@ -4,7 +4,7 @@ import { transactions, profiles } from '@/lib/db/schema'
 import { eq, gte, and } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
-import { Sparkles, Share2 } from 'lucide-react'
+import { Sparkles, Share2, Leaf, Banknote, Utensils, ShoppingBag, Scale } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
 export default async function RecapsPage() {
@@ -45,24 +45,29 @@ export default async function RecapsPage() {
   const topCategorySpend = sortedCategories.length > 0 ? sortedCategories[0][1] : 0
 
   // Determine Vibe
-  let vibe = "Zen Master 🧘"
+  let vibe = "Zen Master"
+  let VibeIcon = Leaf
   let vibeDesc = "You barely spent a dime this week. Monk status achieved."
   let gradient = "from-[#ff00ff] to-primary"
 
   if (totalSpend > 5000) {
-    vibe = "Big Spender 💸"
+    vibe = "Big Spender"
+    VibeIcon = Banknote
     vibeDesc = "You were making it rain this week!"
     gradient = "from-destructive to-warning"
   } else if (topCategory === 'food') {
-    vibe = "Foodie 🍔"
+    vibe = "Foodie"
+    VibeIcon = Utensils
     vibeDesc = "Your stomach dictates your wallet."
     gradient = "from-warning to-primary"
   } else if (topCategory === 'shopping') {
-    vibe = "Retail Therapist 🛍️"
+    vibe = "Retail Therapist"
+    VibeIcon = ShoppingBag
     vibeDesc = "Treat yo self was the motto this week."
     gradient = "from-[#ff00ff] to-accent"
   } else if (totalSpend > 0) {
-    vibe = "Balanced ⚖️"
+    vibe = "Balanced"
+    VibeIcon = Scale
     vibeDesc = "Keeping things steady and smooth."
     gradient = "from-primary to-secondary"
   }
@@ -91,7 +96,10 @@ export default async function RecapsPage() {
           <div className="space-y-6 relative z-10">
             <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-6 shadow-xl border border-white/40 transform -rotate-2 hover:rotate-0 transition-transform">
               <div className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-1">The Verdict</div>
-              <div className="text-3xl font-black font-heading text-gray-900 leading-none mb-2">{vibe}</div>
+              <div className="flex items-center gap-2 mb-2">
+                <VibeIcon className="w-8 h-8 text-gray-900" />
+                <div className="text-3xl font-black font-heading text-gray-900 leading-none">{vibe}</div>
+              </div>
               <p className="text-gray-600 font-medium leading-snug">{vibeDesc}</p>
             </div>
 

@@ -3,7 +3,8 @@ import { db } from '@/lib/db/client'
 import { profiles } from '@/lib/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { BadgeCard } from '@/components/BadgeCard'
 import { Flame, Trophy, Star, Shield, Zap, Target } from 'lucide-react'
 
 export default async function StreaksPage() {
@@ -24,11 +25,11 @@ export default async function StreaksPage() {
   const currentStreak = Number(userProfile?.currentStreak || 0)
   const longestStreak = Number(userProfile?.longestStreak || 0)
 
-  const badges = [
-    { icon: <Target className="w-8 h-8 text-primary" />, title: 'First Log', desc: 'Logged your first expense.', earned: true },
-    { icon: <Flame className="w-8 h-8 text-warning" />, title: '7-Day Streak', desc: 'Maintained a streak for a week.', earned: longestStreak >= 7 },
-    { icon: <Star className="w-8 h-8 text-[#ff00ff]" />, title: 'Goal Setter', desc: 'Created your first goal.', earned: true }, // mocked as true for effect
-    { icon: <Zap className="w-8 h-8 text-secondary" />, title: '30-Day Streak', desc: 'Maintained a streak for a month.', earned: longestStreak >= 30 },
+  const badges: { icon: React.ReactNode, title: string, desc: string, earned: boolean, tier: 'bronze' | 'silver' | 'gold' | 'diamond' }[] = [
+    { icon: <Target className="w-6 h-6" />, title: 'First Log', desc: 'Logged your first expense.', earned: true, tier: 'bronze' },
+    { icon: <Flame className="w-6 h-6" />, title: '7-Day Streak', desc: 'Maintained a streak for a week.', earned: longestStreak >= 7, tier: 'silver' },
+    { icon: <Star className="w-6 h-6" />, title: 'Goal Setter', desc: 'Created your first goal.', earned: true, tier: 'gold' },
+    { icon: <Zap className="w-6 h-6" />, title: '30-Day Streak', desc: 'Maintained a streak for a month.', earned: longestStreak >= 30, tier: 'diamond' },
   ]
 
   return (
@@ -79,17 +80,7 @@ export default async function StreaksPage() {
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {badges.map((badge, i) => (
-              <Card key={i} className={`bg-surface border-border overflow-hidden transition-all duration-300 ${badge.earned ? 'hover:border-primary/50 hover:shadow-[0_0_15px_rgba(184,255,60,0.1)]' : 'opacity-60 grayscale'}`}>
-                <CardContent className="p-6 flex items-start gap-4">
-                  <div className={`p-3 rounded-xl ${badge.earned ? 'bg-background shadow-inner' : 'bg-muted'}`}>
-                    {badge.icon}
-                  </div>
-                  <div>
-                    <h3 className="font-heading font-bold text-lg">{badge.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-snug">{badge.desc}</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <BadgeCard key={i} {...badge} />
             ))}
           </div>
         </div>
