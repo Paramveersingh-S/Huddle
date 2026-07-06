@@ -1,0 +1,8 @@
+# Huddle AI Money App
+
+Huddle is an AI-powered money app for Gen Z that turns budgeting into a collaborative and engaging experience.
+Features include AI receipt scanning, personal savings goals, and non-custodial group savings (Pods).
+
+- [Pricing](/pricing)
+- [Sign Up](/sign-up)
+- [Blog](/blog)
