@@ -41,12 +41,12 @@ Huddle transforms boring expense logging into a highly gamified, socially accoun
 
 ```mermaid
 graph TD
-    Client["Next.js Client Components"] -->|Server Actions / API Routes| Server["Next.js App Router Node Edge"]
+    Client["Next.js Client Components"] -->|Server Actions| Server["Next.js App Router Node Edge"]
     
-    Server -->|@supabase/ssr| Auth["Supabase Auth"]
+    Server -->|Supabase SSR| Auth["Supabase Auth"]
     Server -->|Drizzle ORM| DB[("Supabase PostgreSQL")]
     
-    Server -->|@ai-sdk/google| Gemini["Google Gemini 1.5 Flash"]
+    Server -->|Vercel AI SDK| Gemini["Google Gemini 1.5 Flash"]
     Server -->|Stripe SDK| Stripe["Stripe Checkout & Webhooks"]
     Server -->|Resend SDK| Resend["Resend Email API"]
     

@@ -10,6 +10,8 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
           <div className="sm:ml-auto flex items-center justify-center space-x-6 sm:space-x-8 text-sm font-medium w-full sm:w-auto overflow-x-auto pb-1 sm:pb-0">
             <a href="/dashboard" className="text-foreground hover:text-primary transition-colors whitespace-nowrap font-semibold">Dashboard</a>
+            <a href="/streaks" className="text-foreground hover:text-warning transition-colors whitespace-nowrap font-semibold">Streaks</a>
+            <a href="/recaps" className="text-foreground hover:text-[#ff00ff] transition-colors whitespace-nowrap font-semibold">Recaps</a>
             <a href="/goals" className="text-foreground hover:text-primary transition-colors whitespace-nowrap font-semibold">Goals</a>
             <a href="/pods" className="text-foreground hover:text-secondary transition-colors whitespace-nowrap font-semibold">Pods</a>
             <a href="/coach" className="text-foreground hover:text-accent transition-colors whitespace-nowrap font-semibold">Coach</a>
