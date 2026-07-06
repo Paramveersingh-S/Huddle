@@ -9,11 +9,11 @@ Huddle transforms boring expense logging into a highly gamified, socially accoun
 
 ## ✨ Core Features
 
-* **📸 AI Receipt Scanning**: Snap a picture of a receipt or payment screenshot, and our Gemini 1.5 Flash integration automatically extracts the merchant, amount, category, and date.
-* **🎯 Social Savings Pods**: Join or create public/private "Pods" to save towards a common goal with friends (e.g., "Goa Trip 2026"). Compete on realtime leaderboards based on group contributions.
-* **🤖 AI Money Coach**: A personalized AI coach powered by the Vercel AI SDK. It adapts to your "money vibe" (blunt, nerdy, or playful) and gives you direct insights or roasts based on your spending habits.
-* **🔥 Gamification & Streaks**: Maintain daily streaks for logging expenses, building extreme financial accountability.
-* **📱 Weekly Recaps**: Generate highly shareable, Instagram-ready "Vibe Check" recap cards summarizing your spending behavior.
+* **AI Receipt Scanning**: Snap a picture of a receipt or payment screenshot, and our Gemini 1.5 Flash integration automatically extracts the merchant, amount, category, and date.
+* **Social Savings Pods**: Join or create public/private "Pods" to save towards a common goal with friends (e.g., "Goa Trip 2026"). Compete on realtime leaderboards based on group contributions.
+* **AI Money Coach**: A personalized AI coach powered by the Vercel AI SDK. It adapts to your "money vibe" (blunt, nerdy, or playful) and gives you direct insights or roasts based on your spending habits.
+* **Gamification & Streaks**: Maintain daily streaks for logging expenses, building extreme financial accountability.
+* **Weekly Recaps**: Generate highly shareable, Instagram-ready "Vibe Check" recap cards summarizing your spending behavior.
 
 ## 🛠 Enterprise Tech Stack
 
