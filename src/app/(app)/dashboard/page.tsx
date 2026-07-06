@@ -5,6 +5,7 @@ import { db } from '@/lib/db/client'
 import { profiles, goals, transactions } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
+import { TransactionEntryDialog } from '@/components/TransactionEntryDialog'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -22,17 +23,21 @@ export default async function DashboardPage() {
     where: eq(goals.userId, user.id)
   })
 
-  // Empty state if no transactions (first time user)
+  // Calculate actual spend and empty state
   const txs = await db.select().from(transactions).where(eq(transactions.userId, user.id))
   const isFirstTime = txs.length === 0
+  
+  const totalSpend = txs.reduce((acc, tx) => acc + parseFloat(tx.amount || '0'), 0)
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-heading font-bold tracking-tight">Dashboard</h1>
-        <Button className="font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
-          Scan a receipt
-        </Button>
+        <TransactionEntryDialog>
+          <Button className="font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+            Scan a receipt
+          </Button>
+        </TransactionEntryDialog>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -40,16 +45,16 @@ export default async function DashboardPage() {
         <Card className="col-span-1 lg:col-span-2 bg-surface border-border overflow-hidden relative">
           <div className="absolute top-0 right-0 p-32 bg-primary/5 rounded-full blur-3xl -z-10 -mr-16 -mt-16"></div>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">This Week's Spend</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Total Spend</CardTitle>
           </CardHeader>
           <CardContent>
             {isFirstTime ? (
               <div className="text-5xl font-bold font-heading text-muted-foreground opacity-50 mt-2">₹0.00</div>
             ) : (
-              <div className="text-5xl font-bold font-heading mt-2">₹0.00</div> 
+              <div className="text-5xl font-bold font-heading mt-2">₹{totalSpend.toFixed(2)}</div> 
             )}
             <p className="text-sm text-muted-foreground mt-4">
-              {isFirstTime ? 'Scan your first receipt to see stats' : 'Compared to last week'}
+              {isFirstTime ? 'Scan your first receipt to see stats' : `${txs.length} transactions logged`}
             </p>
           </CardContent>
         </Card>
@@ -95,9 +100,11 @@ export default async function DashboardPage() {
               Log your first expense by scanning a receipt or payment screenshot. We do the boring data entry for you.
             </p>
           </div>
-          <Button size="lg" className="mt-4 font-bold text-base shadow-[0_0_20px_rgba(184,255,60,0.3)] active:scale-95 transition-all hover:shadow-[0_0_30px_rgba(184,255,60,0.5)]">
-            Scan your first receipt
-          </Button>
+          <TransactionEntryDialog>
+            <Button size="lg" className="mt-4 font-bold text-base shadow-[0_0_20px_rgba(184,255,60,0.3)] active:scale-95 transition-all hover:shadow-[0_0_30px_rgba(184,255,60,0.5)]">
+              Scan your first receipt
+            </Button>
+          </TransactionEntryDialog>
         </Card>
       )}
     </div>
