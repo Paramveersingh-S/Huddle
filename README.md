@@ -20,14 +20,6 @@
 
 Huddle transforms boring expense logging into a highly gamified, socially accountable experience. Designed with premium "Vengeance UI" aesthetics, Huddle makes saving money feel like leveling up alongside your squad.
 
-## 📸 Dashboard Overview
-
-<div align="center">
-  <img src="public/assets/dashboard-1.png" alt="Huddle Dashboard View 1" width="800" />
-  <br />
-  <br />
-  <img src="public/assets/dashboard-2.png" alt="Huddle Dashboard View 2" width="800" />
-</div>
 
 ## ✨ Core Features
 
