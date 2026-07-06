@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/assets/huddle.png" alt="Huddle Logo" width="120" height="120" style="border-radius: 20%" />
   
-  <h1>Huddle 🚀</h1>
+  <h1>Huddle</h1>
   <p><strong>The Social Finance Tracker for Gen Z</strong></p>
 </div>
 
