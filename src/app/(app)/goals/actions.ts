@@ -18,7 +18,7 @@ export async function addGoal(formData: FormData) {
     title,
     targetAmount: targetAmount.toString(),
     currentAmount: '0',
-    deadline: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
+    targetDate: new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString(),
   })
 
   revalidatePath('/goals')

@@ -38,11 +38,11 @@ export default async function PodsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-heading font-bold tracking-tight">Savings Pods</h1>
         <Dialog>
-          <DialogTrigger asChild>
+          <DialogTrigger render={
             <Button className="font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
               Create a Pod
             </Button>
-          </DialogTrigger>
+          } />
           <DialogContent className="sm:max-w-[425px] bg-background border-border">
             <DialogHeader>
               <DialogTitle className="font-heading text-2xl tracking-tight">Create a Pod</DialogTitle>

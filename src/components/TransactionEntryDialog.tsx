@@ -153,7 +153,7 @@ export function TransactionEntryDialog({ children }: { children?: React.ReactNod
              </div>
              <div className="space-y-2">
                <Label htmlFor="category">Category</Label>
-               <Select value={category} onValueChange={setCategory} required>
+               <Select value={category} onValueChange={(val) => setCategory(val || '')} required>
                  <SelectTrigger className="bg-surface">
                    <SelectValue placeholder="Category" />
                  </SelectTrigger>

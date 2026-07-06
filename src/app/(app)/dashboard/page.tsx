@@ -24,7 +24,6 @@ export default async function DashboardPage() {
   if (!userProfile) {
     const [newProfile] = await db.insert(profiles).values({
       id: user.id,
-      email: user.email!,
       username: user.email!.split('@')[0],
       displayName: user.email!.split('@')[0],
     }).returning()

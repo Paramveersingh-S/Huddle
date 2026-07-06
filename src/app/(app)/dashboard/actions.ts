@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server'
 import { db } from '@/lib/db/client'
 import { transactions, profiles } from '@/lib/db/schema'
 import { revalidatePath } from 'next/cache'
-import { sql } from 'drizzle-orm'
+import { sql, eq } from 'drizzle-orm'
 
 export async function addTransaction(formData: FormData) {
   const supabase = await createClient()
@@ -25,7 +25,6 @@ export async function addTransaction(formData: FormData) {
   if (!userProfile) {
     await db.insert(profiles).values({
       id: user.id,
-      email: user.email!,
       username: user.email!.split('@')[0],
       displayName: user.email!.split('@')[0],
     })
