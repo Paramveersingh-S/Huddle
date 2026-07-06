@@ -39,10 +39,10 @@ User's context: ${txContext}
 Limit your responses to short, conversational messages (1-3 sentences).`
 
   const result = streamText({
-    model: google('gemini-1.5-flash'),
+    model: google('gemini-2.5-flash'),
     system: systemPrompt,
     messages,
   })
 
-  return result.toDataStreamResponse()
+  return result.toTextStreamResponse()
 }

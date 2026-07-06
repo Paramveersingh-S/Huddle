@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://via.placeholder.com/150x150/B8FF3C/000000?text=Huddle" alt="Huddle Logo" width="120" height="120" style="border-radius: 20%" />
+  <img src="public/assets/huddle.png" alt="Huddle Logo" width="120" height="120" style="border-radius: 20%" />
   
   <h1>Huddle 🚀</h1>
   <p><strong>The Social Finance Tracker for Gen Z</strong></p>

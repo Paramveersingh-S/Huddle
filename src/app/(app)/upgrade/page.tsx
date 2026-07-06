@@ -1,7 +1,31 @@
+'use client'
+
 import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { useState } from 'react'
 
 export default function UpgradePage() {
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleUpgrade = async () => {
+    try {
+      setIsLoading(true)
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        throw new Error(data.error || 'Failed to create checkout session')
+      }
+    } catch (err: any) {
+      alert(err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="space-y-16 max-w-5xl mx-auto py-12 px-4">
       <div className="text-center space-y-6">
@@ -60,8 +84,11 @@ export default function UpgradePage() {
             </ul>
           </CardContent>
           <CardFooter className="pt-8">
-            <Button className="w-full font-bold shadow-[0_0_20px_rgba(184,255,60,0.4)] active:scale-95 transition-all hover:shadow-[0_0_30px_rgba(184,255,60,0.6)] text-lg h-14 rounded-xl">
-              Upgrade to Pro
+            <Button 
+              onClick={handleUpgrade}
+              disabled={isLoading}
+              className="w-full font-bold shadow-[0_0_20px_rgba(184,255,60,0.4)] active:scale-95 transition-all hover:shadow-[0_0_30px_rgba(184,255,60,0.6)] text-lg h-14 rounded-xl">
+              {isLoading ? 'Loading...' : 'Upgrade to Pro'}
             </Button>
           </CardFooter>
         </Card>

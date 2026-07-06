@@ -1,17 +1,66 @@
 'use client'
 
-import { useChat } from '@ai-sdk/react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Bot, Hand } from 'lucide-react'
 
 export default function CoachPage() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/coach'
-  })
+  const [messages, setMessages] = useState<{id: string, role: string, content: string}[]>([])
+  const [input, setInput] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleSend = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    if (!input.trim() || isLoading) return
+    
+    const userMsg = { id: Date.now().toString(), role: 'user', content: input }
+    setMessages(prev => [...prev, userMsg])
+    setInput('')
+    setIsLoading(true)
+
+    try {
+      const res = await fetch('/api/coach', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: [...messages, userMsg] })
+      })
+
+      if (!res.ok) {
+        throw new Error(await res.text() || 'Failed to fetch')
+      }
+
+      const reader = res.body?.getReader()
+      if (!reader) throw new Error('No stream available')
+
+      const decoder = new TextDecoder()
+      let aiContent = ''
+      
+      const aiMsgId = (Date.now() + 1).toString()
+      setMessages(prev => [...prev, { id: aiMsgId, role: 'assistant', content: '' }])
+
+      while (true) {
+        const { done, value } = await reader.read()
+        if (done) break
+        
+        const textChunk = decoder.decode(value, { stream: true })
+        aiContent += textChunk
+        
+        setMessages(prev => {
+          const newMsgs = [...prev]
+          newMsgs[newMsgs.length - 1].content = aiContent
+          return newMsgs
+        })
+      }
+    } catch (err: any) {
+      console.error('Chat error:', err)
+      alert('Failed to send message: ' + err.message)
+    } finally {
+      setIsLoading(false)
+    }
+  }
   
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -20,6 +69,8 @@ export default function CoachPage() {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight
     }
   }, [messages])
+
+
 
   return (
     <div className="flex flex-col h-[calc(100vh-8rem)] max-w-4xl mx-auto">
@@ -80,16 +131,20 @@ export default function CoachPage() {
         </CardContent>
         
         <CardFooter className="p-4 border-t border-border/50 bg-background/80 backdrop-blur">
-          <form onSubmit={handleSubmit} className="flex w-full gap-3">
-            <Input 
+          <form onSubmit={handleSend} className="flex w-full gap-3">
+            <input 
+              name="prompt"
               value={input} 
-              onChange={handleInputChange} 
+              onChange={(e) => setInput(e.target.value)} 
               placeholder="Ask about your budget, or tell me what you just bought..." 
-              className="flex-1 bg-surface border-border text-base h-12 rounded-xl"
+              className="flex-1 bg-surface border border-border text-base h-12 rounded-xl px-4 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
             />
-            <Button type="submit" disabled={isLoading || !input?.trim()} className="font-bold shadow-lg shadow-primary/20 h-12 px-6 rounded-xl active:scale-95 transition-transform">
+            <button 
+              type="submit" 
+              disabled={isLoading || !input?.trim()} 
+              className="font-bold shadow-lg shadow-primary/20 h-12 px-6 rounded-xl bg-primary text-black active:scale-95 transition-transform disabled:opacity-50 disabled:cursor-not-allowed">
               Send
-            </Button>
+            </button>
           </form>
         </CardFooter>
       </Card>
