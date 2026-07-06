@@ -1,0 +1,97 @@
+'use client'
+
+import { useChat } from 'ai/react'
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { useEffect, useRef } from 'react'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
+
+export default function CoachPage() {
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    api: '/api/coach'
+  })
+  
+  const scrollRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight
+    }
+  }, [messages])
+
+  return (
+    <div className="flex flex-col h-[calc(100vh-8rem)] max-w-4xl mx-auto">
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-3xl font-heading font-bold tracking-tight">AI Coach</h1>
+      </div>
+
+      <Card className="flex-1 flex flex-col bg-surface border-border overflow-hidden shadow-2xl shadow-primary/5">
+        <CardHeader className="border-b border-border/50 bg-background/80 backdrop-blur">
+          <CardTitle className="flex items-center gap-3">
+            <span className="text-3xl">🤖</span>
+            <span className="font-heading tracking-tight">Huddle Coach</span>
+          </CardTitle>
+        </CardHeader>
+        
+        <CardContent className="flex-1 p-0 relative bg-gradient-to-b from-surface to-background/50">
+          <div className="absolute inset-0 overflow-y-auto p-6 space-y-6" ref={scrollRef}>
+            {messages.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-full text-center text-muted-foreground opacity-80">
+                <div className="text-6xl mb-6 animate-bounce">👋</div>
+                <h2 className="text-2xl font-heading font-semibold text-foreground mb-2">Hi! I'm your AI money coach.</h2>
+                <p className="max-w-xs">Ask me about your spending, goals, or request a financial roast based on your vibe!</p>
+              </div>
+            )}
+            
+            {messages.map(m => (
+              <div key={m.id} className={`flex gap-4 ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                {m.role === 'assistant' && (
+                  <Avatar className="w-10 h-10 border-2 border-primary/20">
+                    <AvatarFallback className="bg-primary/10 text-primary font-bold">AI</AvatarFallback>
+                  </Avatar>
+                )}
+                <div className={`rounded-2xl px-5 py-3 max-w-[80%] shadow-md ${m.role === 'user' ? 'bg-primary text-black rounded-br-sm' : 'bg-background border border-border text-foreground rounded-bl-sm'}`}>
+                  <p className="whitespace-pre-wrap leading-relaxed">{m.content}</p>
+                </div>
+                {m.role === 'user' && (
+                  <Avatar className="w-10 h-10 border-2 border-secondary/20">
+                    <AvatarFallback className="bg-secondary/10 text-secondary font-bold">ME</AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex gap-4 justify-start">
+                <Avatar className="w-10 h-10 border-2 border-primary/20">
+                  <AvatarFallback className="bg-primary/10 text-primary font-bold animate-pulse">AI</AvatarFallback>
+                </Avatar>
+                <div className="rounded-2xl px-5 py-3 bg-background border border-border text-muted-foreground animate-pulse rounded-bl-sm">
+                  <div className="flex space-x-1 items-center h-5">
+                    <div className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                    <div className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                    <div className="w-2 h-2 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+        
+        <CardFooter className="p-4 border-t border-border/50 bg-background/80 backdrop-blur">
+          <form onSubmit={handleSubmit} className="flex w-full gap-3">
+            <Input 
+              value={input} 
+              onChange={handleInputChange} 
+              placeholder="Ask about your budget, or tell me what you just bought..." 
+              className="flex-1 bg-surface border-border text-base h-12 rounded-xl"
+            />
+            <Button type="submit" disabled={isLoading || !input.trim()} className="font-bold shadow-lg shadow-primary/20 h-12 px-6 rounded-xl active:scale-95 transition-transform">
+              Send
+            </Button>
+          </form>
+        </CardFooter>
+      </Card>
+    </div>
+  )
+}
