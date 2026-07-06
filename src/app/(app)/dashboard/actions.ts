@@ -2,8 +2,9 @@
 
 import { createClient } from '@/utils/supabase/server'
 import { db } from '@/lib/db/client'
-import { transactions } from '@/lib/db/schema'
+import { transactions, profiles } from '@/lib/db/schema'
 import { revalidatePath } from 'next/cache'
+import { sql } from 'drizzle-orm'
 
 export async function addTransaction(formData: FormData) {
   const supabase = await createClient()
@@ -28,6 +29,14 @@ export async function addTransaction(formData: FormData) {
     source,
     currency: 'INR',
   })
+
+  // Simple streak logic: increment on transaction
+  await db.execute(sql`
+    UPDATE profiles
+    SET current_streak = current_streak + 1,
+        longest_streak = GREATEST(longest_streak, current_streak + 1)
+    WHERE id = ${user.id}
+  `)
 
   revalidatePath('/dashboard')
 }
