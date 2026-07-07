@@ -25,10 +25,10 @@ Huddle transforms boring expense logging into a highly gamified, socially accoun
 
 * **AI Receipt Scanning**: Snap a picture of a receipt or payment screenshot, and our Gemini 1.5 Flash integration automatically extracts the merchant, amount, category, and date.
 * **Social Savings Pods**: Join or create public/private "Pods" to save towards a common goal with friends (e.g., "Goa Trip 2026"). Compete on realtime leaderboards based on group contributions.
-* **AI Money Coach (Agentic Chat)**: A personalized AI coach powered by the Vercel AI SDK and Google Gemini. Features include:
-  * **RAG (Retrieval-Augmented Generation)**: Uses Supabase `pgvector` to answer questions grounded in your actual financial transactions.
-  * **Local Spend Classification**: Uses an ONNX model (`onnxruntime-node`) for fast spend categorization with a Gemini fallback mechanism.
-  * **Tool Calling Loop**: The agent can dynamically fetch balances, goal progress, and run savings projections.
+* **AI Money Coach (Agentic Chat)**: A personalized financial AI assistant built using the Vercel AI SDK and Google Gemini 1.5 Flash.
+  * **Agentic Tool Calling Loop**: The AI dynamically decides when to query your real-time financial data, fetching transaction history, goal progress, and savings pod statuses to give mathematically grounded answers.
+  * **Spend Classification**: Leverages advanced ML to auto-categorize your transactions, falling back to Gemini for ambiguous edge-cases.
+  * **Projections & Advice**: Simulates savings growth over time and gives actionable budgeting nudges (with strict compliance guardrails to avoid unregulated investment advice).
 * **Gamification & Streaks**: Maintain daily streaks for logging expenses, building extreme financial accountability.
 * **Weekly Recaps**: Generate highly shareable, Instagram-ready "Vibe Check" recap cards summarizing your spending behavior.
 
