@@ -5,6 +5,7 @@ import { db } from '@/lib/db/client'
 import { profiles, goals, transactions } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
 import { TransactionEntryDialog } from '@/components/TransactionEntryDialog'
 import { Flame, Camera } from 'lucide-react'
 
@@ -119,9 +120,11 @@ export default async function DashboardPage() {
                 : '15 AI scans/mo included'}
             </p>
             {userProfile?.subscriptionTier !== 'pro' && (
-              <Button asChild variant="outline" className="w-full text-xs font-bold border-primary/50 text-primary hover:bg-primary/10">
-                <a href="/upgrade">Upgrade to Pro</a>
-              </Button>
+              <Link href="/upgrade" className="w-full block mt-4">
+                <Button variant="outline" className="w-full text-xs font-bold border-primary/50 text-primary hover:bg-primary/10">
+                  Upgrade to Pro
+                </Button>
+              </Link>
             )}
           </CardContent>
         </Card>
