@@ -1,9 +1,12 @@
-import { Message } from 'ai';
+import { UIMessage } from 'ai';
 import { cn } from '@/lib/utils';
 
-export default function CoachMessageBubble({ message }: { message: Message }) {
+export default function CoachMessageBubble({ message }: { message: UIMessage }) {
   const isUser = message.role === 'user';
   
+  const textParts = message.parts?.filter(p => p.type === 'text') || [];
+  const textContent = textParts.map(p => (p as any).text).join('');
+
   return (
     <div className={cn("flex w-full", isUser ? "justify-end" : "justify-start")}>
       <div 
@@ -15,21 +18,21 @@ export default function CoachMessageBubble({ message }: { message: Message }) {
         )}
       >
         {/* If the message has tool invocations, we can show a minimal indicator instead of raw text if needed */}
-        {message.toolInvocations && message.toolInvocations.length > 0 && (
+        {message.parts?.filter(p => p.type === 'tool-invocation').length > 0 && (
           <div className="text-xs opacity-70 mb-2 italic flex flex-col gap-1">
-            {message.toolInvocations.map(invocation => (
-              <span key={invocation.toolCallId}>
-                {'state' in invocation && invocation.state === 'result' 
-                  ? `✓ Checked ${invocation.toolName.replace(/_/g, ' ')}` 
-                  : `⏳ Checking ${invocation.toolName.replace(/_/g, ' ')}...`}
+            {message.parts.filter(p => p.type === 'tool-invocation').map(invocation => (
+              <span key={(invocation as any).toolCallId}>
+                {'state' in invocation && (invocation as any).state === 'result' 
+                  ? `✓ Checked ${(invocation as any).toolName.replace(/_/g, ' ')}` 
+                  : `⏳ Checking ${(invocation as any).toolName.replace(/_/g, ' ')}...`}
               </span>
             ))}
           </div>
         )}
         
-        {message.content && (
+        {textContent && (
           <div className="whitespace-pre-wrap leading-relaxed">
-            {message.content}
+            {textContent}
           </div>
         )}
       </div>

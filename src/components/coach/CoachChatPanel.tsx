@@ -1,14 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { Message } from 'ai';
+import { UIMessage } from 'ai';
 import CoachMessageBubble from './CoachMessageBubble';
 import { Button } from '../ui/button';
 import { Send } from 'lucide-react';
 import { Input } from '../ui/input';
 
 export default function CoachChatPanel({ conversationId }: { conversationId?: string }) {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<UIMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,7 +18,7 @@ export default function CoachChatPanel({ conversationId }: { conversationId?: st
     e?.preventDefault();
     if (!input.trim() || isLoading) return;
     
-    const userMessage: Message = { id: Date.now().toString(), role: 'user', content: input };
+    const userMessage: UIMessage = { id: Date.now().toString(), role: 'user', parts: [{ type: 'text', text: input }] };
     const newMessages = [...messages, userMessage];
     setMessages(newMessages);
     setInput('');
@@ -36,7 +36,7 @@ export default function CoachChatPanel({ conversationId }: { conversationId?: st
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
       
-      const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: '' };
+      const assistantMessage: UIMessage = { id: (Date.now() + 1).toString(), role: 'assistant', parts: [{ type: 'text', text: '' }] };
       setMessages([...newMessages, assistantMessage]);
 
       if (reader) {
@@ -44,7 +44,10 @@ export default function CoachChatPanel({ conversationId }: { conversationId?: st
           const { done, value } = await reader.read();
           if (done) break;
           const chunk = decoder.decode(value, { stream: true });
-          assistantMessage.content += chunk;
+          const textPart = assistantMessage.parts[0];
+          if (textPart.type === 'text') {
+            textPart.text += chunk;
+          }
           setMessages([...newMessages, { ...assistantMessage }]);
         }
       }
