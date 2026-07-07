@@ -99,6 +99,32 @@ export default async function DashboardPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Subscription Card */}
+        <Card className={`bg-surface border-border overflow-hidden relative ${userProfile?.subscriptionTier === 'pro' ? 'border-primary shadow-[0_0_15px_rgba(184,255,60,0.1)]' : ''}`}>
+          <div className="absolute top-0 right-0 p-16 bg-primary/5 rounded-full blur-2xl -z-10 -mr-8 -mt-8"></div>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Subscription</CardTitle>
+            {userProfile?.subscriptionTier === 'pro' && (
+              <span className="text-xs bg-primary text-black px-2 py-0.5 rounded-full font-bold">PRO</span>
+            )}
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold font-heading mt-2 capitalize">
+              Huddle {userProfile?.subscriptionTier || 'Free'}
+            </div>
+            <p className="text-sm text-muted-foreground mt-1 mb-4">
+              {userProfile?.subscriptionTier === 'pro' 
+                ? 'Unlimited AI scans & custom coach' 
+                : '15 AI scans/mo included'}
+            </p>
+            {userProfile?.subscriptionTier !== 'pro' && (
+              <Button asChild variant="outline" className="w-full text-xs font-bold border-primary/50 text-primary hover:bg-primary/10">
+                <a href="/upgrade">Upgrade to Pro</a>
+              </Button>
+            )}
+          </CardContent>
+        </Card>
       </div>
       
       {isFirstTime && (

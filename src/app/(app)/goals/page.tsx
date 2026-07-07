@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Progress } from '@/components/ui/progress'
 import { Button } from '@/components/ui/button'
 import { GoalEntryDialog } from '@/components/GoalEntryDialog'
+import { Target } from 'lucide-react'
 
 export default async function GoalsPage() {
   const supabase = await createClient()
@@ -34,7 +35,9 @@ export default async function GoalsPage() {
       {userGoals.length === 0 ? (
         <Card className="bg-surface/50 border-border p-12 text-center">
           <CardContent className="space-y-4">
-            <div className="text-5xl mb-4">🎯</div>
+            <div className="flex justify-center mb-4">
+              <Target className="w-12 h-12 text-primary" />
+            </div>
             <h2 className="text-2xl font-heading font-semibold">No goals yet</h2>
             <p className="text-muted-foreground max-w-sm mx-auto">Set a target and start tracking your savings towards your dreams!</p>
           </CardContent>

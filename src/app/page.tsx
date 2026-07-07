@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/utils/supabase/server'
 import { redirect } from 'next/navigation'
+import { Flame, Skull } from 'lucide-react'
 
 export default async function LandingPage() {
   const supabase = await createClient()
@@ -83,7 +84,9 @@ export default async function LandingPage() {
                 <div className="grid grid-cols-2 gap-6">
                   <div className="h-32 rounded-2xl bg-surface border border-border/50 p-6 flex flex-col justify-center">
                      <div className="text-sm text-muted-foreground uppercase tracking-wider mb-2">Current Streak</div>
-                     <div className="text-3xl font-heading font-bold text-warning">🔥 14 Days</div>
+                     <div className="text-3xl font-heading font-bold text-warning flex items-center gap-2">
+                       <Flame className="w-8 h-8 fill-warning stroke-warning" /> 14 Days
+                     </div>
                   </div>
                   <div className="h-32 rounded-2xl bg-surface border border-border/50 p-6 flex flex-col justify-center">
                      <div className="text-sm text-muted-foreground uppercase tracking-wider mb-2">Next Goal</div>
@@ -100,8 +103,8 @@ export default async function LandingPage() {
                   <div className="bg-primary text-black rounded-2xl px-4 py-3 text-sm rounded-br-sm ml-auto w-[85%] shadow-md">
                     I just bought another iced latte...
                   </div>
-                  <div className="bg-background border border-border rounded-2xl px-4 py-3 text-sm rounded-bl-sm mr-auto w-[90%] text-foreground shadow-sm">
-                    That's the 4th one this week. Your Goa trip fund is crying right now. Stop it. 💀
+                  <div className="bg-background border border-border rounded-2xl px-4 py-3 text-sm rounded-bl-sm mr-auto w-[90%] text-foreground shadow-sm flex items-center gap-1">
+                    That's the 4th one this week. Your Goa trip fund is crying right now. Stop it. <Skull className="w-4 h-4 inline" />
                   </div>
                 </div>
               </div>
