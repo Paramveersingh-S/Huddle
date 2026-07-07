@@ -25,7 +25,10 @@ Huddle transforms boring expense logging into a highly gamified, socially accoun
 
 * **AI Receipt Scanning**: Snap a picture of a receipt or payment screenshot, and our Gemini 1.5 Flash integration automatically extracts the merchant, amount, category, and date.
 * **Social Savings Pods**: Join or create public/private "Pods" to save towards a common goal with friends (e.g., "Goa Trip 2026"). Compete on realtime leaderboards based on group contributions.
-* **AI Money Coach**: A personalized AI coach powered by the Vercel AI SDK. It adapts to your "money vibe" (blunt, nerdy, or playful) and gives you direct insights or roasts based on your spending habits.
+* **AI Money Coach (Agentic Chat)**: A personalized AI coach powered by the Vercel AI SDK and Google Gemini. Features include:
+  * **RAG (Retrieval-Augmented Generation)**: Uses Supabase `pgvector` to answer questions grounded in your actual financial transactions.
+  * **Local Spend Classification**: Uses an ONNX model (`onnxruntime-node`) for fast spend categorization with a Gemini fallback mechanism.
+  * **Tool Calling Loop**: The agent can dynamically fetch balances, goal progress, and run savings projections.
 * **Gamification & Streaks**: Maintain daily streaks for logging expenses, building extreme financial accountability.
 * **Weekly Recaps**: Generate highly shareable, Instagram-ready "Vibe Check" recap cards summarizing your spending behavior.
 
@@ -33,12 +36,13 @@ Huddle transforms boring expense logging into a highly gamified, socially accoun
 
 ```mermaid
 graph TD
-    Client["Next.js Client Components"] -->|Server Actions| Server["Next.js App Router Node Edge"]
+    Client["Next.js Client Components"] -->|Server Actions / API| Server["Next.js App Router Node Edge"]
     
     Server -->|Supabase SSR| Auth["Supabase Auth"]
-    Server -->|Drizzle ORM| DB[("Supabase PostgreSQL")]
+    Server -->|Drizzle ORM| DB[("Supabase PostgreSQL (pgvector)")]
     
     Server -->|Vercel AI SDK| Gemini["Google Gemini 1.5 Flash"]
+    Server -->|ONNX Runtime| LocalModel["Local Spend Classifier (.onnx)"]
     Server -->|Stripe SDK| Stripe["Stripe Checkout & Webhooks"]
     Server -->|Resend SDK| Resend["Resend Email API"]
     
