@@ -19,28 +19,28 @@ export function ShareableRecapsCard({ username, totalSpend, topCategory }: Share
   let vibe = "Zen Master"
   let VibeIcon = Leaf
   let vibeDesc = "You barely spent a dime this week. Monk status achieved."
-  let gradient = "from-[#ff00ff] to-primary"
+  let pixelColors = "#10b981,#34d399,#6ee7b7" // Greens
 
   if (totalSpend > 5000) {
     vibe = "Big Spender"
     VibeIcon = Banknote
     vibeDesc = "You were making it rain this week!"
-    gradient = "from-destructive to-warning"
+    pixelColors = "#ef4444,#f87171,#fca5a5" // Reds
   } else if (topCategory === 'food') {
     vibe = "Foodie"
     VibeIcon = Utensils
     vibeDesc = "Your stomach dictates your wallet."
-    gradient = "from-warning to-primary"
+    pixelColors = "#f59e0b,#fbbf24,#fcd34d" // Yellows
   } else if (topCategory === 'shopping') {
     vibe = "Retail Therapist"
     VibeIcon = ShoppingBag
     vibeDesc = "Treat yo self was the motto this week."
-    gradient = "from-[#ff00ff] to-accent"
+    pixelColors = "#d946ef,#e879f9,#f0abfc" // Pinks/Purples
   } else if (totalSpend > 0) {
     vibe = "Balanced"
     VibeIcon = Scale
     vibeDesc = "Keeping things steady and smooth."
-    gradient = "from-primary to-secondary"
+    pixelColors = "#3b82f6,#60a5fa,#93c5fd" // Blues
   }
 
   const handleShare = async () => {
@@ -88,9 +88,9 @@ export function ShareableRecapsCard({ username, totalSpend, topCategory }: Share
   return (
     <>
       <div className="relative group w-full" ref={cardRef}>
-        <PixelCard variant="huddle" gap={8} speed={40}>
-          <Card className={`w-full h-full overflow-hidden border-0 bg-gradient-to-br ${gradient} shadow-2xl shadow-primary/20 relative aspect-[9/16] flex flex-col justify-between text-black`}>
-            <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
+        <PixelCard variant="huddle" gap={8} speed={40} colors={pixelColors}>
+          <Card className={`w-full h-full overflow-hidden border-0 bg-transparent shadow-2xl shadow-primary/20 relative aspect-[9/16] flex flex-col justify-between text-white`}>
+            <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
             <div className="absolute inset-0 p-8 flex flex-col justify-between">
               
               <div className="space-y-2 relative z-10">
