@@ -1,18 +1,59 @@
 'use client';
 
-import { useChat } from '@ai-sdk/react';
+import { useState } from 'react';
+import { Message } from 'ai';
 import CoachMessageBubble from './CoachMessageBubble';
 import { Button } from '../ui/button';
 import { Send } from 'lucide-react';
 import { Input } from '../ui/input';
 
 export default function CoachChatPanel({ conversationId }: { conversationId?: string }) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-    api: '/api/coach/chat',
-    body: {
-      conversationId,
-    },
-  });
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => setInput(e.target.value);
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!input.trim() || isLoading) return;
+    
+    const userMessage: Message = { id: Date.now().toString(), role: 'user', content: input };
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
+    setInput('');
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/coach/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ conversationId, messages: newMessages }),
+      });
+
+      if (!response.ok) throw new Error(response.statusText);
+
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      
+      const assistantMessage: Message = { id: (Date.now() + 1).toString(), role: 'assistant', content: '' };
+      setMessages([...newMessages, assistantMessage]);
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          const chunk = decoder.decode(value, { stream: true });
+          assistantMessage.content += chunk;
+          setMessages([...newMessages, { ...assistantMessage }]);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="flex flex-col h-[600px] w-full max-w-2xl mx-auto rounded-2xl border border-white/10 bg-black/50 backdrop-blur-xl overflow-hidden shadow-2xl">
