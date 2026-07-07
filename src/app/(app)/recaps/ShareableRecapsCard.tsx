@@ -89,7 +89,7 @@ export function ShareableRecapsCard({ username, totalSpend, topCategory }: Share
     <>
       <div className="relative group w-full" ref={cardRef}>
         <PixelCard variant="huddle" gap={8} speed={40}>
-          <Card className={`w-full h-full border-0 bg-gradient-to-br ${gradient} shadow-2xl shadow-primary/20 relative flex flex-col justify-between text-black`}>
+          <Card className={`w-full h-full overflow-hidden border-0 bg-gradient-to-br ${gradient} shadow-2xl shadow-primary/20 relative aspect-[9/16] flex flex-col justify-between text-black`}>
             <div className="absolute inset-0 bg-black/10 backdrop-blur-[2px]"></div>
             <div className="absolute inset-0 p-8 flex flex-col justify-between">
               
