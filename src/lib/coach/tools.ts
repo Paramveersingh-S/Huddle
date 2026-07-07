@@ -87,7 +87,7 @@ export const buildCoachTools = (userId: string) => {
           monthlyAmount,
           months,
           projectedTotal: total,
-          message: \`If you save ₹\${monthlyAmount} for \${months} months, you will have ₹\${total}.\`
+          message: `If you save ₹${monthlyAmount} for ${months} months, you will have ₹${total}.`
         };
       },
     }),

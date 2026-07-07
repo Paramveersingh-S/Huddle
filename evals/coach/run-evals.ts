@@ -25,7 +25,6 @@ async function runEvals() {
         system: COACH_SYSTEM_PROMPT,
         messages: [{ role: 'user', content: testCase.userMessage }],
         tools: buildCoachTools('mock-user-id'),
-        maxSteps: 5,
       });
 
       console.log(`[Agent Response] ${responseText}`);

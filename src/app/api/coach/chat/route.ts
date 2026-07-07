@@ -46,7 +46,6 @@ export async function POST(req: Request) {
       system: COACH_SYSTEM_PROMPT,
       messages,
       tools: buildCoachTools(user.id),
-      maxSteps: 5, // ReAct loop threshold
       onFinish: async ({ text, toolCalls }) => {
         // Save the assistant's final response and any tool calls made
         await db.insert(coachMessages).values({
