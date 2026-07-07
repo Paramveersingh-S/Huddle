@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Share2, Leaf, Banknote, Utensils, ShoppingBag, Scale } from 'lucide-react';
 import PixelCard from '@/components/ui/PixelCard';
-import html2canvas from 'html2canvas';
+import { toBlob } from 'html-to-image';
 
 interface ShareableRecapsCardProps {
   username: string;
@@ -47,15 +47,13 @@ export function ShareableRecapsCard({ username, totalSpend, topCategory }: Share
     if (!cardRef.current) return;
 
     try {
-      const canvas = await html2canvas(cardRef.current, {
-        scale: 2,
-        useCORS: true,
+      const blob = await toBlob(cardRef.current, {
+        pixelRatio: 2,
         backgroundColor: '#0B0B14',
       });
 
-      canvas.toBlob(async (blob) => {
-        if (!blob) return;
-        const file = new File([blob], 'huddle-vibe.png', { type: 'image/png' });
+      if (!blob) return;
+      const file = new File([blob], 'huddle-vibe.png', { type: 'image/png' });
 
         if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
           try {
@@ -78,7 +76,6 @@ export function ShareableRecapsCard({ username, totalSpend, topCategory }: Share
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);
-      }, 'image/png');
     } catch (error) {
       console.error('Failed to generate image:', error);
       alert('Failed to generate shareable image.');
