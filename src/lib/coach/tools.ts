@@ -13,8 +13,8 @@ export const buildCoachTools = (userId: string) => {
         category: z.string().optional(),
         startDate: z.string().optional().describe('YYYY-MM-DD'),
         endDate: z.string().optional().describe('YYYY-MM-DD'),
-      }),
-      execute: async ({ category, startDate, endDate }) => {
+      } as any),
+      execute: async ({ category, startDate, endDate }: any) => {
         let query = db.select().from(transactions).where(eq(transactions.userId, userId));
         // Add basic filters if present
         // In a real app we'd construct dynamic drizzle conditions here
@@ -30,14 +30,14 @@ export const buildCoachTools = (userId: string) => {
         }
         return results.slice(0, 20); // Limit to 20 for context window safety
       },
-    }),
+    } as any),
 
     get_goal_progress: tool({
       description: 'Get progress on the user\'s savings goals.',
       parameters: z.object({
         goalId: z.string().optional(),
-      }),
-      execute: async ({ goalId }) => {
+      } as any),
+      execute: async ({ goalId }: any) => {
         const query = db.select().from(goals).where(eq(goals.userId, userId));
         const results = await query;
         if (goalId) {
@@ -45,14 +45,14 @@ export const buildCoachTools = (userId: string) => {
         }
         return results;
       },
-    }),
+    } as any),
 
     get_pod_status: tool({
       description: 'Get status of savings pods the user is part of or created.',
       parameters: z.object({
         podId: z.string().optional(),
-      }),
-      execute: async ({ podId }) => {
+      } as any),
+      execute: async ({ podId }: any) => {
         const query = db.select().from(pods).where(eq(pods.createdBy, userId));
         const results = await query;
         if (podId) {
@@ -60,7 +60,7 @@ export const buildCoachTools = (userId: string) => {
         }
         return results;
       },
-    }),
+    } as any),
 
     categorize_spend: tool({
       description: 'Categorize a spend transaction using the AI classifier.',
@@ -68,20 +68,20 @@ export const buildCoachTools = (userId: string) => {
         merchant: z.string(),
         amount: z.number(),
         description: z.string(),
-      }),
-      execute: async ({ merchant, amount, description }) => {
+      } as any),
+      execute: async ({ merchant, amount, description }: any) => {
         const res = await categorizeSpend({ userId, merchant, amount, description });
         return { category: res.category, confidence: res.confidence };
       },
-    }),
+    } as any),
 
     run_savings_projection: tool({
       description: 'Run a simple savings projection to see how much will be saved after a given number of months.',
       parameters: z.object({
         monthlyAmount: z.number(),
         months: z.number(),
-      }),
-      execute: async ({ monthlyAmount, months }) => {
+      } as any),
+      execute: async ({ monthlyAmount, months }: any) => {
         const total = monthlyAmount * months;
         return {
           monthlyAmount,
@@ -90,6 +90,6 @@ export const buildCoachTools = (userId: string) => {
           message: `If you save ₹${monthlyAmount} for ${months} months, you will have ₹${total}.`
         };
       },
-    }),
+    } as any),
   };
 };

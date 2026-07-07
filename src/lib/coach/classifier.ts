@@ -88,9 +88,7 @@ export async function categorizeSpend(params: {
     
     try {
       const { object } = await generateObject({
-        model: google('gemini-2.5-flash', {
-          structuredOutputs: false // Some older API versions need this, standard uses true
-        }), 
+        model: google('gemini-2.5-flash'), 
         schema: z.object({
           category: z.enum(SPENDING_CATEGORIES),
           confidence: z.number().min(0).max(1),
